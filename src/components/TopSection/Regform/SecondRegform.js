@@ -26,25 +26,9 @@ export default class SecondRegform extends Component {
     };
 
     phoneNumberBlur = (status, value, countryData) => {
-        let phone_number = value;
-        if (!this.phoneValidate(phone_number)) {
-            this.setState({
-                errors: ['Enter only number']
-            });
-            return this.state.errors;
-        }
-        else if (phone_number.length > 3) {
-            this.setState({
-                phone_number: phone_number,
-                phone_country_prefix: '+' + `${countryData.dialCode}`
-            });
-        }
-        else {
-            this.setState({
-                errors: ['Enter phone number']
-            });
-            return this.state.errors
-        }
+        this.setState({
+            phone_country_prefix: `+${countryData.dialCode}`
+        });
     }
 
     phoneValidate = (value) => {
@@ -60,25 +44,28 @@ export default class SecondRegform extends Component {
     };
 
     handleForward = () => {
-        let paramsToValidate = {
-            email: this.context.email,
-            first_name: this.context.firstName,
-            last_name: this.state.last_name,
-            password: this.state.password,
-            agree_2: this.state.agree_2,
-            phone_number: this.state.phone_number,
-            phone_country_prefix: this.state.phone_country_prefix
-        };
-        console.log(paramsToValidate);
-        let submitResponse = this.props.validateParams(paramsToValidate);
+        console.log(this.state.phone_number);
+        if (this.state.phone_number.length > 5) {
+            let paramsToValidate = {
+                email: this.context.email,
+                first_name: this.context.firstName,
+                last_name: this.state.last_name,
+                password: this.state.password,
+                agree_2: this.state.agree_2,
+                phone_number: this.state.phone_number,
+                phone_country_prefix: this.state.phone_country_prefix
+            };
+            console.log(paramsToValidate);
+            let submitResponse = this.props.validateParams(paramsToValidate);
 
-        if (submitResponse.success) {
-            this.props.handleSubmit(paramsToValidate);
-        }
-        else{
-            this.setState({
-                errors: submitResponse.errors
-            })
+            if (submitResponse.success) {
+                this.props.handleSubmit(paramsToValidate);
+            }
+            else{
+                this.setState({
+                    errors: submitResponse.errors
+                })
+            }
         }
     };
 
@@ -141,7 +128,7 @@ export default class SecondRegform extends Component {
                 <img src={logo} alt="logo" className="logo small"/>
                 <div className='inner'>
                     <div className='form-wrapper one'>
-                        {/* {this.state.errors && <div className="errors">
+                         {/*{this.state.errors && <div className="errors">
                                 {this.state.errors[0]}
                                     </div>}*/}
                         <div className="row">
@@ -163,6 +150,14 @@ export default class SecondRegform extends Component {
                             separateDialCode={true}
                             onSelectFlag={this.handleSelectFlag}
                             onPhoneNumberBlur={this.phoneNumberBlur}
+                            onPhoneNumberChange={(status, value, countryData, number, id) => {
+                                if (value.length < 15) {
+                                    this.setState({
+                                        phone_number: value.replace(/[^0-9]/g, ''),
+                                    })
+                                }
+                            }}
+                            value={this.state.phone_number}
                         />
                         <button onClick={this.handleForward} className='start' >{languageManager.button_last}</button>
                     </div>
