@@ -44,7 +44,6 @@ export default class SecondRegform extends Component {
     };
 
     handleForward = () => {
-        console.log(this.state.phone_number);
         if (this.state.phone_number.length > 5) {
             let paramsToValidate = {
                 email: this.context.email,
@@ -55,7 +54,6 @@ export default class SecondRegform extends Component {
                 phone_number: this.state.phone_number,
                 phone_country_prefix: this.state.phone_country_prefix
             };
-            console.log(paramsToValidate);
             let submitResponse = this.props.validateParams(paramsToValidate);
 
             if (submitResponse.success) {
