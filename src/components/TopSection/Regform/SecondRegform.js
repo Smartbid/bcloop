@@ -7,11 +7,7 @@ import {UserContext} from '../../../helpers/dataContext';
 
 
 export default class SecondRegform extends Component {
-    constructor(props) {
-        super(props);
-
-    }
-    static contextType = UserContext
+    static contextType = UserContext;
     state = {
         first_name: "",
         last_name: "",
@@ -48,8 +44,8 @@ export default class SecondRegform extends Component {
             let paramsToValidate = {
                 email: this.context.email,
                 first_name: this.context.firstName,
-                last_name: this.state.last_name,
-                password: this.state.password,
+                last_name: this.context.lastName,
+                password: this.context.password,
                 agree_2: this.state.agree_2,
                 phone_number: this.state.phone_number,
                 phone_country_prefix: this.state.phone_country_prefix
@@ -82,7 +78,7 @@ export default class SecondRegform extends Component {
                 this.setState({first_name: firstNameValue});
             }
 
-        } else if (name === 'last_name') {
+        } else if (name === 'lastName') {
 
             let SecondNameValue = value;
             if (this.nameValidate(SecondNameValue)) {
@@ -120,7 +116,6 @@ export default class SecondRegform extends Component {
     render() {
 
         let languageManager = this.props.languageManager();
-
         return (
             <div className="SecondRegform">
                 <img src={logo} alt="logo" className="logo small"/>
@@ -134,28 +129,31 @@ export default class SecondRegform extends Component {
                                 <input className="inputfield fname small-input" type="text" name="first_name" value={this.context.firstName} placeholder={languageManager.fname} onChange={(e) => this.handleStepChange(e.target.name, e.target.value)}/>
                             </div>
                             <div className="col-lg-6">
-                                <input className="inputfield lname small-input" type="text" name="last_name" placeholder={languageManager.lname} onChange={(e) => this.handleStepChange(e.target.name, e.target.value)}/>
+                                <input className="inputfield lname small-input" type="text" name="lastName" placeholder={languageManager.lname} defaultValue={this.context.lastName} onChange={(e) => {this.handleStepChange(e.target.name, e.target.value); this.context.getValueFromInputs(e)}}/>
                             </div>
                         </div>
                         <input className="inputfield email small-input" type="text" name="email" placeholder={languageManager.email} value={this.context.email} autoComplete='off' onChange={(e) => this.handleStepChange(e.target.name, e.target.value)}/>
-                        <input className="inputfield pass small-input" type="password" maxLength="8" onChange={(e) => this.handleStepChange(e.target.name, e.target.value)} name="password" placeholder={languageManager.pass}/>
+                        <input className="inputfield pass small-input" type="password" maxLength="8" defaultValue={this.context.password} onChange={(e) => {this.handleStepChange(e.target.name, e.target.value); this.context.getValueFromInputs(e)}} name="password" placeholder={languageManager.pass}/>
                         <img src={hint} alt="hint" className="hint"/>
                         <IntlTelInput
+                            fieldName="phoneNumber"
                             preferredCountries={[this.props.countryCode]}
                             containerClassName="intl-tel-input"
                             inputClassName="inputfield tel small-input"
+                            defaultCountry={this.context.countryCode}
                             autoPlaceholder={true}
                             separateDialCode={true}
-                            onSelectFlag={this.handleSelectFlag}
                             onPhoneNumberBlur={this.phoneNumberBlur}
                             onPhoneNumberChange={(status, value, countryData, number, id) => {
                                 if (value.length < 15) {
                                     this.setState({
                                         phone_number: value.replace(/[^0-9]/g, ''),
-                                    })
+                                    });
+                                    this.context.savedPhoneNumber(value);
+                                    this.context.defaultCountry(countryData.iso2);
                                 }
                             }}
-                            value={this.state.phone_number}
+                            value={this.context.phoneNumber}
                         />
                         <button onClick={this.handleForward} className='start' >{languageManager.button_last}</button>
                     </div>

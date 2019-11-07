@@ -13,7 +13,11 @@ class App extends ReactQueryParams {
     state = {
         page: 'main',
         firstName: '',
-        email: ''
+        email: '',
+        lastName: '',
+        password: '',
+        phoneNumber: '',
+        countryCode: ""
     };
 
     handleStep = (step) => {
@@ -31,6 +35,14 @@ class App extends ReactQueryParams {
 
     getValueFromInputs = e => {
         this.setState({ [e.target.name] : e.target.value});
+    };
+
+    savedPhoneNumber = value => {
+        this.setState({phoneNumber: value});
+    };
+
+    defaultCountry = countryData => {
+        this.setState({countryCode: countryData});
     };
 
     pageHandler = (page) => {
@@ -64,7 +76,13 @@ class App extends ReactQueryParams {
                         <UserContext.Provider value={{
                             firstName: this.state.firstName,
                             email: this.state.email,
-                            getValueFromInputs: this.getValueFromInputs
+                            lastName: this.state.lastName,
+                            password: this.state.password,
+                            phoneNumber: this.state.phoneNumber,
+                            countryCode: this.state.countryCode,
+                            getValueFromInputs: this.getValueFromInputs,
+                            savedPhoneNumber: this.savedPhoneNumber,
+                            defaultCountry: this.defaultCountry
                         }}>
                             <Route exact path="/" render={() =>
                                 <MainPage countryCode={this.props.countryCode}
