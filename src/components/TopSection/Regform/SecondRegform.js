@@ -48,7 +48,7 @@ export default class SecondRegform extends Component {
                 password: this.context.password,
                 agree_2: this.state.agree_2,
                 phone_number: this.state.phone_number,
-                phone_country_prefix: this.state.phone_country_prefix
+                phone_country_prefix: this.context.countryPrefix
             };
             let submitResponse = this.props.validateParams(paramsToValidate);
 
@@ -150,7 +150,7 @@ export default class SecondRegform extends Component {
                                         phone_number: value.replace(/[^0-9]/g, ''),
                                     });
                                     this.context.savedPhoneNumber(value);
-                                    this.context.defaultCountry(countryData.iso2);
+                                    this.context.defaultCountry(countryData.iso2, `+${countryData.dialCode}`);
                                 }
                             }}
                             value={this.context.phoneNumber}

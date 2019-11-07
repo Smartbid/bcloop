@@ -17,7 +17,8 @@ class App extends ReactQueryParams {
         lastName: '',
         password: '',
         phoneNumber: '',
-        countryCode: ""
+        countryCode: "",
+        countryPrefix: ''
     };
 
     handleStep = (step) => {
@@ -41,8 +42,11 @@ class App extends ReactQueryParams {
         this.setState({phoneNumber: value});
     };
 
-    defaultCountry = countryData => {
-        this.setState({countryCode: countryData});
+    defaultCountry = (countryData, countryPrefix) => {
+        this.setState({
+            countryCode: countryData,
+            countryPrefix: countryPrefix
+        });
     };
 
     pageHandler = (page) => {
@@ -80,6 +84,7 @@ class App extends ReactQueryParams {
                             password: this.state.password,
                             phoneNumber: this.state.phoneNumber,
                             countryCode: this.state.countryCode,
+                            countryPrefix: this.state.countryPrefix,
                             getValueFromInputs: this.getValueFromInputs,
                             savedPhoneNumber: this.savedPhoneNumber,
                             defaultCountry: this.defaultCountry

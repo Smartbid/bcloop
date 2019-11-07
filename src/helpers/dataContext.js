@@ -7,6 +7,7 @@ export const UserContext = React.createContext({
     password: '',
     phoneNumber: '',
     countryCode: '',
+    countryPrefix: '',
     getValueFromInputs: (e) => {},
     savedPhoneNumber: (value) => {},
     defaultCountry: (countryData) => {}
