@@ -65,9 +65,9 @@ class FirstRegform extends Component {
                 <img src={logo} alt="logo" className="logo"/>
                 <div className='inner'>
                     <div className='form-wrapper'>
-                        {/*{this.state.errors && <div className="errors">
+                        {this.state.errors && <div className="errors">
                             {this.state.errors[0]}
-                        </div>}*/}
+                        </div>}
                         <input className="inputfield fname" type="text" name="firstName" defaultValue={this.context.firstName} onChange={(e) => {this.context.getValueFromInputs(e)}} placeholder={languageManager.fname} />
                         <input className="inputfield email" type="text" name="email" defaultValue={this.context.email} onChange={(e) => {this.context.getValueFromInputs(e)}} placeholder={languageManager.email} />
                         <Link to="/members" onClick={this.saveData} className='start'>{languageManager.button}</Link>

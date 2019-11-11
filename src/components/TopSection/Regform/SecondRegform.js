@@ -121,9 +121,9 @@ export default class SecondRegform extends Component {
                 <img src={logo} alt="logo" className="logo small"/>
                 <div className='inner'>
                     <div className='form-wrapper one'>
-                         {/*{this.state.errors && <div className="errors">
+                         {this.state.errors && <div className="errors">
                                 {this.state.errors[0]}
-                                    </div>}*/}
+                                    </div>}
                         <div className="row">
                             <div className="col-lg-6">
                                 <input className="inputfield fname small-input" type="text" name="first_name" value={this.context.firstName} placeholder={languageManager.fname} onChange={(e) => this.handleStepChange(e.target.name, e.target.value)}/>
