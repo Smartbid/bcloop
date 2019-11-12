@@ -4,6 +4,7 @@ import VideoPlayer from './VideoPlayer/VideoPlayer.js'
 import SecondRegform  from './Regform/SecondRegform'
 import SecondTitle  from './SecondTitle/SecondTitle'
 import Carousel from 'react-bootstrap/Carousel'
+import {UserContext} from '../../helpers/dataContext';
 
 import video2 from './members-en.mp4'
 

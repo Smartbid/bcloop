@@ -17,7 +17,9 @@ export default class MainPage extends Component {
                     handleForward={this.props.handleForward}
                     languageManager={this.props.languageManager}
                     validateParams={this.props.validateParams}
-                    location={this.props.location}/>
+                    location={this.props.location}
+                    step={this.props.step}
+                />
 
                 <MidSection languageManager={this.props.languageManager}/>
 

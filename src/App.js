@@ -11,6 +11,7 @@ import * as Pages from './pages'
 
 class App extends ReactQueryParams {
     state = {
+        step: 1,
         page: 'main',
         firstName: '',
         email: '',
@@ -31,7 +32,7 @@ class App extends ReactQueryParams {
 
     handleSubmit = (params) => {
         this.props.onSubmit(params)
-        .then(() =>  this.props.history.push('/'))
+        /*.then(() =>  this.props.history.push('/'))*/
     };
 
     getValueFromInputs = e => {
@@ -95,6 +96,7 @@ class App extends ReactQueryParams {
                                           pageHandler={this.pageHandler}
                                           handleForward={this.handleForward}
                                           languageManager={this.props.languageManager}
+                                          step={this.state.step}
                                           validateParams={this.props.validateParams}/>}
                             />
                             <Route path="/members" render={() =>

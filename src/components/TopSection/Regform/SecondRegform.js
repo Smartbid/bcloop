@@ -4,22 +4,27 @@ import 'react-intl-tel-input/dist/main.css'
 import logo from '../../BottomSection/logo.png'
 import hint from './6b.png'
 import {UserContext} from '../../../helpers/dataContext';
+import {Link} from 'react-router-dom'
 
 
 export default class SecondRegform extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            first_name: "",
+            last_name: "",
+            email: "",
+            check: false,
+            password: "",
+            phone_country_prefix: "",
+            phone_number: "",
+            agree_1: true,
+            agree_2: true,
+            errorIndexes: [0,1,2,3]
+        }
+
+    }
     static contextType = UserContext;
-    state = {
-        first_name: "",
-        last_name: "",
-        email: "",
-        check: false,
-        password: "",
-        phone_country_prefix: "",
-        phone_number: "",
-        agree_1: true,
-        agree_2: true,
-        errorIndexes: [0,1,2,3]
-    };
 
     phoneNumberBlur = (status, value, countryData) => {
         this.setState({
@@ -39,7 +44,30 @@ export default class SecondRegform extends Component {
         return !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
     };
 
-    handleForward = () => {
+    /*sendFirstData = () => {
+       let parametrsToValidate = {
+            email: this.context.email,
+            first_name: this.context.firstName,
+            last_name: this.context.lastName
+        };
+
+        let submitResponse = this.props.validateParams(parametrsToValidate);
+
+        if (submitResponse.success) {
+            this.props.handleForward(parametrsToValidate);
+            this.props.handleStep(this.props.step + 1);
+        }
+        else{
+            this.setState({
+                errors: submitResponse.errors
+            })
+        }
+    };*/
+
+    sendAllData = (e) => {
+        e.preventDefault();
+        /*this.sendFirstData();*/
+
         if (this.state.phone_number.length > 5) {
             let paramsToValidate = {
                 email: this.context.email,
@@ -48,18 +76,20 @@ export default class SecondRegform extends Component {
                 password: this.context.password,
                 agree_2: this.state.agree_2,
                 phone_number: this.state.phone_number,
-                phone_country_prefix: this.context.countryPrefix
+                phone_country_prefix: this.context.countryPrefix,
+                funnel_name: window.location.origin
             };
-            let submitResponse = this.props.validateParams(paramsToValidate);
 
+            this.setState({ paramsToValidate }, () => {this.props.handleSubmit(this.state.paramsToValidate)})
+            /*let submitResponse = this.props.validateParams(paramsToValidate);
             if (submitResponse.success) {
-                this.props.handleSubmit(paramsToValidate);
+                this.setState({ paramsToValidate }, () => {this.props.handleSubmit(this.state.paramsToValidate)})
             }
             else{
                 this.setState({
                     errors: submitResponse.errors
                 })
-            }
+            }*/
         }
     };
 
@@ -148,14 +178,15 @@ export default class SecondRegform extends Component {
                                 if (value.length < 15) {
                                     this.setState({
                                         phone_number: value.replace(/[^0-9]/g, ''),
+                                    }, () => {
+                                        this.context.savedPhoneNumber(this.state.phone_number);
+                                        this.context.defaultCountry(countryData.iso2, `+${countryData.dialCode}`);
                                     });
-                                    this.context.savedPhoneNumber(value);
-                                    this.context.defaultCountry(countryData.iso2, `+${countryData.dialCode}`);
                                 }
                             }}
                             value={this.context.phoneNumber}
                         />
-                        <button onClick={this.handleForward} className='start' >{languageManager.button_last}</button>
+                        <Link to="/"><button onClick={(e) => {this.sendAllData(e)}} className='start' >{languageManager.button_last}</button></Link>
                     </div>
                 </div>
             </div>

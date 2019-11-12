@@ -29,7 +29,6 @@ class FirstRegform extends Component {
         let firstName = form.querySelector('.fname').value.trim();
         let email = form.querySelector('.email').value.trim();
 
-
         if(firstName.length === 0) {
             this.setState({
                 errors: ['Enter Name']
