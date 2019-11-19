@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 export default class SecondTitle extends Component {
 
     render() {
-        let languageManager = this.props.languageManager();
+        let languageManager = this.props.languageManager
 
         return (
             <div className="FirstTitle">

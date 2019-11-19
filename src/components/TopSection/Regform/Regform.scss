@@ -629,8 +629,9 @@
 }
 
 .loading {
-    width: 100%;
-    margin: 4.8vw auto;
+    width: 50%;
+    filter: invert(100%);
+    margin: 4vw auto;
     -webkit-animation-name: pulse;
     animation-name: pulse;
     -webkit-animation-duration: 3s;

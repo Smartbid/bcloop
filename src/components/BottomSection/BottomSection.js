@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
+import { thisTypeAnnotation } from '@babel/types';
 
 export default class BottomSection extends Component {
     render() {
@@ -11,10 +13,10 @@ export default class BottomSection extends Component {
                         <div className="row">
                             <div className="col-sm-12">
                                 <div className="links">
-                                    <a href="#">Home</a>
-                                    <a onClick={() => this.props.pageHandler('agreement')}>Website Agreement</a>
-                                    <a onClick={() => this.props.pageHandler('risc')}>Risk Disclaimer</a>
-                                    <a onClick={() => this.props.pageHandler('privacy')}>Privacy Policy</a>
+                                    <Link to={{pathname: '/', search: this.props.location.search}}>Home</Link>
+                                    <Link to={{pathname: '/agreement', search: this.props.location.search}}>Website Agreement</Link>
+                                    <Link to={{pathname: '/risk', search: this.props.location.search}}>Risk Disclaimer</Link>
+                                    <Link to={{pathname: '/privacy', search: this.props.location.search}}>Privacy Policy</Link>
                                 </div>
                                 <div className="footer-description">
                                     <p>{languageManager.risk[0]}</p>

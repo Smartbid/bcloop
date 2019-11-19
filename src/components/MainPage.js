@@ -9,24 +9,11 @@ export default class MainPage extends Component {
 
         return (
             <div className='MainPage'>
-                <TopSection
-                    countryCode={this.props.countryCode}
-                    handleStep={this.props.handleStep}
-                    handleSubmit={this.props.handleSubmit}
-                    pageHandler={this.props.pageHandler}
-                    handleForward={this.props.handleForward}
-                    languageManager={this.props.languageManager}
-                    validateParams={this.props.validateParams}
-                    location={this.props.location}
-                    step={this.props.step}
-                />
+                <TopSection {...this.props} />
 
-                <MidSection languageManager={this.props.languageManager}/>
+                <MidSection location={this.props.location} languageManager={this.props.languageManager}/>
 
-                <BottomSection
-                    languageManager={this.props.languageManager}
-                    pageHandler={this.props.pageHandler}
-                    handleForward={this.props.handleForward}/>
+                <BottomSection {...this.props} />
             </div>
         )
     }

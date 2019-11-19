@@ -1,21 +1,31 @@
 import React, { Component } from 'react'
-import Discover from './Discover/Discover'
+import Faq from './Faq/Faq'
 import Review from './Review/Review'
+import Discover from './Discover/Discover'
 import EarnBlock from './EarnBlock/EarnBlock'
 import MoreNews from './MoreNews/MoreNews'
 import Advantage from './Advantage/Advantage'
 
-export default class MidSection extends Component {
+export default class SecondMidSection extends Component {
     render() {
-        return (
-            <div className="MidSection">
-                <Advantage languageManager={this.props.languageManager}/>
-                <Discover languageManager={this.props.languageManager}/>
-                <EarnBlock languageManager={this.props.languageManager}/>
-                <MoreNews languageManager={this.props.languageManager}/>
-                <Review languageManager={this.props.languageManager}/>
-            </div>
+        let languageManager=this.props.languageManager,
+        path = this.props.location.pathname
 
+        if (path === '/') return (
+            <div className="MidSection">
+                <Advantage languageManager={languageManager}/>
+                <Discover languageManager={languageManager}/>
+                <EarnBlock languageManager={languageManager}/>
+                <MoreNews languageManager={languageManager}/>
+                <Review languageManager={languageManager}/>
+            </div>
+        )
+        else return (
+            <div className="MidSection">
+                <Review languageManager={this.props.languageManager}/>
+                <Faq languageManager={this.props.languageManager}/>
+                <Discover languageManager={this.props.languageManager}/>
+            </div>
         )
     }
 }

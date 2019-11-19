@@ -1,18 +1,9 @@
 import React, { Component } from 'react'
 
 export default class Page extends Component {
-    onBackButtonEvent = (e) => {
-        e.preventDefault();
-        this.props.pageHandler('main');
-    }
 
-    componentDidMount = () => {
-        window.location.href = '#';
-        window.addEventListener('popstate', this.onBackButtonEvent);
-    }
-
-    componentWillUnmount = () => {
-        window.removeEventListener('popstate', this.onBackButtonEvent);
+    componentDidMount() {
+        window.scrollTo(0,0)
     }
 
     render() {

@@ -121,7 +121,7 @@ export const gov = {
     
 }
 
-export const risc = {
+export const risk = {
 
     title: 'Risk Disclaimer',
     toptext: [

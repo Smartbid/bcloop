@@ -7,7 +7,7 @@ export default class VideoPlayer extends Component {
   render () {
     return (
       <div className="VideoPlayer">
-        <ReactPlayer url={this.props.link} playing={true} controls={true} width='100%' height='100%'/>
+        <ReactPlayer url={this.props.link} playing={false} controls={true} width='100%' height='100%'/>
       </div>
     )
   }

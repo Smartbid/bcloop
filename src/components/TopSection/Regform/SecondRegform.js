@@ -3,193 +3,98 @@ import IntlTelInput from 'react-intl-tel-input'
 import 'react-intl-tel-input/dist/main.css'
 import logo from '../../BottomSection/logo.png'
 import hint from './6b.png'
-import {UserContext} from '../../../helpers/dataContext';
-import {Link} from 'react-router-dom'
-
+import load from '../../../../public/load.png'
+import { Redirect } from 'react-router-dom'
 
 export default class SecondRegform extends Component {
     constructor(props) {
-        super(props);
+        super(props)
+
         this.state = {
-            first_name: "",
-            last_name: "",
-            email: "",
-            check: false,
-            password: "",
-            phone_country_prefix: "",
-            phone_number: "",
-            agree_1: true,
-            agree_2: true,
-            errorIndexes: [0,1,2,3]
+            form: {
+                first_name: '',
+                last_name: '',
+                password: '',
+                email: '',
+                phone_number: ''
+            },
         }
 
-    }
-    static contextType = UserContext;
-
-    phoneNumberBlur = (status, value, countryData) => {
-        this.setState({
-            phone_country_prefix: `+${countryData.dialCode}`
-        });
+        this.sendData = this.sendData.bind(this)
     }
 
-    phoneValidate = (value) => {
-        return !/[^0-9\-\/]/.test(value);
-    };
+    componentDidMount() {
+        if (this.props.location) this.setState({form: Object.assign(this.state.form, this.props.location.state)})
+    }
 
-    nameValidate = (value) => {
-        return !/^([^0-9]*)$/.test(value);
-    };
-
-    emailValidate = (value) => {
-        return !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-    };
-
-    /*sendFirstData = () => {
-       let parametrsToValidate = {
-            email: this.context.email,
-            first_name: this.context.firstName,
-            last_name: this.context.lastName
-        };
-
-        let submitResponse = this.props.validateParams(parametrsToValidate);
-
-        if (submitResponse.success) {
-            this.props.handleForward(parametrsToValidate);
-            this.props.handleStep(this.props.step + 1);
-        }
-        else{
-            this.setState({
-                errors: submitResponse.errors
-            })
-        }
-    };*/
-
-    sendAllData = (e) => {
-        e.preventDefault();
-        /*this.sendFirstData();*/
-
-        if (this.state.phone_number.length > 5) {
-            let paramsToValidate = {
-                email: this.context.email,
-                first_name: this.context.firstName,
-                last_name: this.context.lastName,
-                password: this.context.password,
-                agree_2: this.state.agree_2,
-                phone_number: this.state.phone_number,
-                phone_country_prefix: this.context.countryPrefix,
-                funnel_name: window.location.origin
-            };
-
-            this.setState({ paramsToValidate }, () => {this.props.handleSubmit(this.state.paramsToValidate)})
-            /*let submitResponse = this.props.validateParams(paramsToValidate);
-            if (submitResponse.success) {
-                this.setState({ paramsToValidate }, () => {this.props.handleSubmit(this.state.paramsToValidate)})
-            }
-            else{
-                this.setState({
-                    errors: submitResponse.errors
-                })
-            }*/
-        }
-    };
-
-
-    handleStepChange = (name, value) => {
-        if (name === 'first_name') {
-
-            let firstNameValue = value;
-            if (this.nameValidate(firstNameValue)) {
-                this.setState({
-                    errors: ['Please enter name without digits']
-                });
-                return this.state.errors
-
-            } else {
-                this.setState({first_name: firstNameValue});
-            }
-
-        } else if (name === 'lastName') {
-
-            let SecondNameValue = value;
-            if (this.nameValidate(SecondNameValue)) {
-
-                this.setState({
-                    errors: ['Please enter name without digits']
-                });
-                return this.state.errors
-
-            } else {
-                this.setState({last_name: SecondNameValue});
-            }
-
-        } else if (name === 'password') {
-
-            let passwordValue = value;
-            this.setState({password: passwordValue});
-
-        } else if (name === 'email') {
-
-            let emailValue = value;
-            if(this.emailValidate(emailValue)) {
-                this.setState({
-                    errors: ['Invalid email format']
-                });
-                return this.state.errors
-
-            } else {
-                this.setState({email: emailValue});
-            }
-        }
-    };
-
+    sendData() {
+        let form = this.state.form,
+        checkParams = this.props.validateParams(form)
+        
+        if (checkParams.success) this.setState({loading: true, errors: {}}, () => {
+            this.props.setLeadData(form).then(this.props.handleSubmit).then(res => {if (!res.success) this.setState({redirect: true})})
+        })
+        else this.setState({errors: checkParams.errors, loading: false})
+    }
 
     render() {
+        let languageManager = this.props.languageManager(),
+        errorMsgs = (this.state.errors) ? Object.keys(this.state.errors).map(key => { if (this.state.errors[key].messages) return this.state.errors[key].messages }).filter(value => value) : []
 
-        let languageManager = this.props.languageManager();
-        return (
-            <div className="SecondRegform">
-                <img src={logo} alt="logo" className="logo small"/>
-                <div className='inner'>
-                    <div className='form-wrapper one'>
-                         {this.state.errors && <div className="errors">
-                                {this.state.errors[0]}
-                                    </div>}
-                        <div className="row">
-                            <div className="col-lg-6">
-                                <input className="inputfield fname small-input" type="text" name="first_name" value={this.context.firstName} placeholder={languageManager.fname} onChange={(e) => this.handleStepChange(e.target.name, e.target.value)}/>
+        if (!this.state.redirect) { 
+            return (
+                <div className="SecondRegform">
+                    <img src={logo} alt="logo" className="logo small"/>
+                    {
+                        (!this.state.loading) ?
+                        <div className='inner'>
+                            <div className='form-wrapper one'>
+                                {errorMsgs.map(arr => arr.map(error => <div key={error} className="errors">{error}</div>))}
+
+                                <div className="row">
+
+                                    {this.props.rowInputs.map(input => 
+                                        <div key={input} className="col-lg-6">
+                                            <input className={"inputfield small-input " + input} 
+                                            type="text" name={input} 
+                                            defaultValue={this.state.form[input]} 
+                                            onChange={(e) => this.setState({form: this.props.updateValue(this.state.form, e.target.value, input)})} 
+                                            placeholder={languageManager[input]} />
+                                        </div>)}
+
+                                </div>
+
+                                {this.props.inputs.map(input => 
+                                    <input className={"inputfield small-input " + input}
+                                        maxLength={(input !== 'password') ? '32' : '8'}
+                                        key={input} 
+                                        type={input} 
+                                        name={input} 
+                                        defaultValue={this.state.form[input]} 
+                                        onChange={(e) => this.setState({form: this.props.updateValue(this.state.form, e.target.value, input)})} 
+                                        placeholder={languageManager[input]} />)}
+                               
+                                <img src={hint} alt="hint" className="hint"/>
+
+                                <IntlTelInput
+                                    fieldName="phone_number"
+                                    preferredCountries={[this.props.countryCode]}
+                                    containerClassName="intl-tel-input"
+                                    inputClassName="inputfield tel small-input"
+                                    defaultCountry={this.props.countryCode}
+                                    autoPlaceholder={true}
+                                    separateDialCode={true}
+                                    value={this.state.form.phone_number}
+                                    format={true}
+                                    onPhoneNumberChange={(a, value, b) => {value = value.replace(/\D/g,''); this.setState({form: this.props.updateValue(this.state.form, value, 'phone_number')})}}
+                                    />
+                                <button onClick={this.sendData} className='start' >{languageManager.button_last}</button>
                             </div>
-                            <div className="col-lg-6">
-                                <input className="inputfield lname small-input" type="text" name="lastName" placeholder={languageManager.lname} defaultValue={this.context.lastName} onChange={(e) => {this.handleStepChange(e.target.name, e.target.value); this.context.getValueFromInputs(e)}}/>
-                            </div>
-                        </div>
-                        <input className="inputfield email small-input" type="text" name="email" placeholder={languageManager.email} value={this.context.email} autoComplete='off' onChange={(e) => this.handleStepChange(e.target.name, e.target.value)}/>
-                        <input className="inputfield pass small-input" type="password" maxLength="8" defaultValue={this.context.password} onChange={(e) => {this.handleStepChange(e.target.name, e.target.value); this.context.getValueFromInputs(e)}} name="password" placeholder={languageManager.pass}/>
-                        <img src={hint} alt="hint" className="hint"/>
-                        <IntlTelInput
-                            fieldName="phoneNumber"
-                            preferredCountries={[this.props.countryCode]}
-                            containerClassName="intl-tel-input"
-                            inputClassName="inputfield tel small-input"
-                            defaultCountry={this.context.countryCode}
-                            autoPlaceholder={true}
-                            separateDialCode={true}
-                            onPhoneNumberBlur={this.phoneNumberBlur}
-                            onPhoneNumberChange={(status, value, countryData, number, id) => {
-                                if (value.length < 15) {
-                                    this.setState({
-                                        phone_number: value.replace(/[^0-9]/g, ''),
-                                    }, () => {
-                                        this.context.savedPhoneNumber(this.state.phone_number);
-                                        this.context.defaultCountry(countryData.iso2, `+${countryData.dialCode}`);
-                                    });
-                                }
-                            }}
-                            value={this.context.phoneNumber}
-                        />
-                        <Link to="/"><button onClick={(e) => {this.sendAllData(e)}} className='start' >{languageManager.button_last}</button></Link>
-                    </div>
-                </div>
-            </div>
-        )
+                    </div> : <img src={load} alt="loading" className="loading"/>
+                    }
+            </div>)
+
+        } else { return <Redirect to={{ pathname: '/', search: this.props.location.search, state: this.state.form}}/> }
+
     }
 }

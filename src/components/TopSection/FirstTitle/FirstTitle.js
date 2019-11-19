@@ -4,7 +4,7 @@ import {AnimatedOnScroll} from "react-animated-css-onscroll";
 export default class FirstTitle extends Component {
 
     render() {
-        let languageManager = this.props.languageManager();
+        let languageManager = this.props.languageManager
 
         return (
             <div className="FirstTitle">
