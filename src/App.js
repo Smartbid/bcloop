@@ -16,10 +16,10 @@ class App extends ReactQueryParams {
             <div className='App'>
                 <Switch>
                     <Route exact path="/" render={() =>
-                        <MainPage {...this.props} handleStep={this.handleStep} step={this.props.step}/>
+                        <MainPage {...this.props} handleStep={this.handleStep}/>
                     } />
                     <Route path="/members" render={() =>
-                        <MainPage {...this.props}  handleStep={this.handleStep} step={this.props.step}/>
+                        <MainPage {...this.props}  handleStep={this.handleStep}/>
                     } />
                     {pages.map(page => 
                         <Route key={page} path={"/" + page} render={() =>

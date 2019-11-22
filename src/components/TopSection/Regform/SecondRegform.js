@@ -6,6 +6,8 @@ import hint from './6b.png'
 import load from '../../../../public/load.png'
 import { Redirect } from 'react-router-dom'
 
+import {errorMessages, RegInputs} from 'sb-lp-framework'
+
 export default class SecondRegform extends Component {
     constructor(props) {
         super(props)
@@ -17,7 +19,7 @@ export default class SecondRegform extends Component {
                 password: '',
                 email: '',
                 phone_number: ''
-            },
+            }
         }
 
         this.sendData = this.sendData.bind(this)
@@ -32,16 +34,15 @@ export default class SecondRegform extends Component {
         checkParams = this.props.validateParams(form)
         
         if (checkParams.success) this.setState({loading: true, errors: {}}, () => {
-            this.props.setLeadData(form).then(this.props.handleSubmit).then(res => {if (!res.success) this.setState({redirect: true})})
+            this.props.setLeadData(form).then(this.props.handleSubmit).then(res => (res.redirectUrl) ? window.location = res.redirectUrl : this.setState({path: '/'}))
         })
         else this.setState({errors: checkParams.errors, loading: false})
     }
 
     render() {
-        let languageManager = this.props.languageManager(),
-        errorMsgs = (this.state.errors) ? Object.keys(this.state.errors).map(key => { if (this.state.errors[key].messages) return this.state.errors[key].messages }).filter(value => value) : []
+        let languageManager = this.props.languageManager()
 
-        if (!this.state.redirect) { 
+        if (!this.state.path) { 
             return (
                 <div className="SecondRegform">
                     <img src={logo} alt="logo" className="logo small"/>
@@ -49,30 +50,29 @@ export default class SecondRegform extends Component {
                         (!this.state.loading) ?
                         <div className='inner'>
                             <div className='form-wrapper one'>
-                                {errorMsgs.map(arr => arr.map(error => <div key={error} className="errors">{error}</div>))}
+                                {errorMessages(this.state.errors).map(arr => arr.map(error => <div key={error} className="errors">{error}</div>))}
 
                                 <div className="row">
 
-                                    {this.props.rowInputs.map(input => 
-                                        <div key={input} className="col-lg-6">
-                                            <input className={"inputfield small-input " + input} 
-                                            type="text" name={input} 
-                                            defaultValue={this.state.form[input]} 
-                                            onChange={(e) => this.setState({form: this.props.updateValue(this.state.form, e.target.value, input)})} 
-                                            placeholder={languageManager[input]} />
-                                        </div>)}
+                                    <RegInputs 
+                                        form={this.state.form} 
+                                        inputs={this.props.rowInputs}
+                                        className={'inputfield small-input inline'}
+                                        onChange={form => this.setState({form})}
+                                        languageManager={languageManager}/>
 
                                 </div>
 
+
                                 {this.props.inputs.map(input => 
-                                    <input className={"inputfield small-input " + input}
-                                        maxLength={(input !== 'password') ? '32' : '8'}
-                                        key={input} 
-                                        type={input} 
-                                        name={input} 
-                                        defaultValue={this.state.form[input]} 
-                                        onChange={(e) => this.setState({form: this.props.updateValue(this.state.form, e.target.value, input)})} 
-                                        placeholder={languageManager[input]} />)}
+                                    <RegInputs 
+                                        maxLength={(input === 'password') ? '8' : '32'}
+                                        form={this.state.form} 
+                                        inputs={[input]}
+                                        className={'inputfield small-input'}
+                                        onChange={form => this.setState({form})}
+                                        languageManager={languageManager}/>
+                                )}
                                
                                 <img src={hint} alt="hint" className="hint"/>
 
@@ -94,7 +94,7 @@ export default class SecondRegform extends Component {
                     }
             </div>)
 
-        } else { return <Redirect to={{ pathname: '/', search: this.props.location.search, state: this.state.form}}/> }
+        } else { return <Redirect to={{ pathname: this.state.path, search: this.props.location.search, state: this.state.form}}/> }
 
     }
 }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import logo from '../../BottomSection/logo.png'
 import {Redirect} from 'react-router-dom'
+import {RegInputs, errorMessages} from 'sb-lp-framework'
 
 class FirstRegform extends Component {
     constructor(props) {
@@ -27,17 +28,21 @@ class FirstRegform extends Component {
     }
 
     render() {
-        let languageManager = this.props.languageManager(),
-        errorMsgs = (this.state.errors) ? Object.keys(this.state.errors).map(key => { if (this.state.errors[key].messages) return this.state.errors[key].messages }).filter(value => value) : []
-
+        let languageManager = this.props.languageManager()
+       
         if (!this.state.redirect) {
             return (
                 <div className="FirstRegform">
                     <img src={logo} alt="logo" className="logo"/>
                     <div className='inner'>
                         <div className='form-wrapper'>
-                            {errorMsgs.map(arr => arr.map(error => <div key={error} className="errors">{error}</div>))}
-                            {this.props.inputs.map(input => <input className={"inputfield " + input} key={input} type="text" name={input} onChange={(e) => this.setState({form: this.props.updateValue(this.state.form, e.target.value, input)})} placeholder={languageManager[input]} />)}
+                            {errorMessages(this.state.errors).map(arr => arr.map(error => <div key={error} className="errors">{error}</div>))}
+                            <RegInputs 
+                                form={this.state.form} 
+                                inputs={['first_name', 'email']}
+                                className={'inputfield'}
+                                onChange={form => this.setState({form})}
+                                languageManager={languageManager}/>
                             <button onClick={this.saveData} className='start'>{languageManager.button}</button>
                         </div>
                     </div>

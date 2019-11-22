@@ -10,7 +10,7 @@ ReactDOM.render(
     <BrowserRouter>
         <LpFramework
             resourceFile={require('./languages.json')}
-            funnel_name={"test"}>
+            funnel_name={"Bitcoin Loophole"}>
             <LpFrameworkWrapper Component={App}/>
         </LpFramework>
     </BrowserRouter>,
