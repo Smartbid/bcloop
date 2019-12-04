@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import logo from '../../BottomSection/logo.png'
 import {Redirect} from 'react-router-dom'
-import {RegInputs, errorMessages} from 'sb-lp-framework'
+import {Reginputs, errorMessages} from 'sb-lp-framework'
 
 class FirstRegform extends Component {
     constructor(props) {
@@ -12,10 +12,17 @@ class FirstRegform extends Component {
                 first_name: '',
                 email: ''
             },
+            errors: {},
             redirect: false,
+            responseError: ''
         }
 
         this.saveData = this.saveData.bind(this)
+    }
+
+    
+    componentDidMount() {
+        if (this.props.location.state) this.setState({form: Object.assign(this.state.form, this.props.location.state.form), responseError: this.props.location.state.responseError})
     }
 
     saveData() {
@@ -29,6 +36,29 @@ class FirstRegform extends Component {
 
     render() {
         let languageManager = this.props.languageManager()
+        let step = {   
+            className: 'cardb',
+            inputs: [
+                {
+                    name: 'first_name',
+                    type: 'text',
+                    className: 'inputfield',
+                    errorClassName: 'inputError',
+                    groupClassName: 'form_group'
+                },
+                {
+                    name: 'email',
+                    type: 'email',
+                    className: 'inputfield',
+                    errorClassName: 'inputError',
+                    groupClassName: 'form_group'
+                }
+            ],
+            button: {
+                className: 'start',
+                text: languageManager.button
+            },
+        }
        
         if (!this.state.redirect) {
             return (
@@ -36,14 +66,15 @@ class FirstRegform extends Component {
                     <img src={logo} alt="logo" className="logo"/>
                     <div className='inner'>
                         <div className='form-wrapper'>
+                            <div className="errors">{this.state.responseError}</div>
                             {errorMessages(this.state.errors).map(arr => arr.map(error => <div key={error} className="errors">{error}</div>))}
-                            <RegInputs 
-                                form={this.state.form} 
-                                inputs={['first_name', 'email']}
-                                className={'inputfield'}
-                                onChange={form => this.setState({form})}
-                                languageManager={languageManager}/>
-                            <button onClick={this.saveData} className='start'>{languageManager.button}</button>
+                            <Reginputs 
+                                {...step}
+                                form={this.state.form}
+                                languageManager={languageManager}
+                                errors={this.state.errors}
+                                onChange={form => this.setState({form})}/>
+                            <button onClick={this.saveData} className='start' >{languageManager.button}</button>
                         </div>
                     </div>
                 </div>
@@ -52,7 +83,7 @@ class FirstRegform extends Component {
         } else { 
             return <Redirect to={{ pathname: '/members', 
                         search: this.props.location.search, 
-                        state: this.state.form}}/> }
+                        state: this.state}}/> }
 
     }
 }
