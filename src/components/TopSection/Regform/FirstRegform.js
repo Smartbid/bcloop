@@ -67,7 +67,7 @@ class FirstRegform extends Component {
                     <div className='inner'>
                         <div className='form-wrapper'>
                             <div className="errors">{this.state.responseError}</div>
-                            {errorMessages(this.state.errors).map(arr => arr.map(error => <div key={error} className="errors">{error}</div>))}
+                            
                             <Reginputs 
                                 {...step}
                                 form={this.state.form}
