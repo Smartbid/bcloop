@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import logo from '../../BottomSection/logo.png'
 import {Redirect} from 'react-router-dom'
 import {Reginputs, errorMessages} from 'sb-lp-framework'
+import { resolvePreset } from '@babel/core'
 
 class FirstRegform extends Component {
     constructor(props) {
@@ -70,6 +71,7 @@ class FirstRegform extends Component {
                             
                             <Reginputs 
                                 {...step}
+                                trackEdit={this.props.trackStartEdit}
                                 form={this.state.form}
                                 languageManager={languageManager}
                                 errors={this.state.errors}
