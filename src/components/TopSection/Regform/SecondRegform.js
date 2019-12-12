@@ -118,6 +118,7 @@ export default class SecondRegform extends Component {
                                 <img src={hint} alt="hint" className="hint"/>
 
                                 <FormGroup style={{width: '100%'}}>
+
                                     <IntlTelInput
                                         style={{width: '100%'}}
                                         fieldName="phone_number"
@@ -131,6 +132,7 @@ export default class SecondRegform extends Component {
                                         format={true}
                                         onPhoneNumberChange={(a, value, b) => {value = value.replace(/\D/g,''); this.setState({form: this.props.updateValue(this.state.form, value, 'phone_number')})}}
                                         />
+                                        
                                     {this.state.errors.hasOwnProperty('phone_number') && this.state.errors['phone_number']['messages'] &&
                                     <FormFeedback style={{display: 'block'}}>{this.state.errors['phone_number'].messages[0]}</FormFeedback>}
 
