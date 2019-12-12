@@ -76,7 +76,9 @@ class FirstRegform extends Component {
                                 languageManager={languageManager}
                                 errors={this.state.errors}
                                 onChange={form => this.setState({form})}/>
+                                
                             <button onClick={this.saveData} className='start' >{languageManager.button}</button>
+
                         </div>
                     </div>
                 </div>
