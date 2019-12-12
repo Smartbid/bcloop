@@ -71,7 +71,7 @@ class FirstRegform extends Component {
                             
                             <Reginputs 
                                 {...step}
-                                trackEdit={this.props.trackStartEdit}
+                                trackStartEdit={this.props.trackStartEdit}
                                 form={this.state.form}
                                 languageManager={languageManager}
                                 errors={this.state.errors}

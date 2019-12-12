@@ -98,6 +98,7 @@ export default class SecondRegform extends Component {
 
                                     <Reginputs 
                                         {...stepone}
+                                        trackStartEdit={this.props.trackStartEdit}
                                         form={this.state.form}
                                         languageManager={languageManager}
                                         errors={this.state.errors}
@@ -108,6 +109,7 @@ export default class SecondRegform extends Component {
 
                                 <Reginputs 
                                         {...steptwo}
+                                        trackStartEdit={this.props.trackStartEdit}
                                         form={this.state.form}
                                         languageManager={languageManager}
                                         errors={this.state.errors}
